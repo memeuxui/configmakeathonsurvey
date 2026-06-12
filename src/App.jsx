@@ -40,6 +40,13 @@ const sb = {
     });
     return r.ok;
   },
+  async delete(table, id) {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`, {
+      method: "DELETE",
+      headers: this.headers,
+    });
+    return r.ok;
+  },
 };
 
 // ── Fallback: window.storage (preview en Claude) ──────────
@@ -82,6 +89,17 @@ const db = {
       return rows?.[0]?.content ? JSON.parse(rows[0].content) : {};
     }
     return local.loadInsights();
+  },
+  async loadResponsesWithIds() {
+    if (isConfigured) {
+      const rows = await sb.select("responses", "&order=created_at.desc");
+      return Array.isArray(rows) ? rows : [];
+    }
+    return [];
+  },
+  async deleteResponse(id) {
+    if (isConfigured) return sb.delete("responses", id);
+    return false;
   },
 };
 
@@ -631,10 +649,24 @@ function InsightLogin({ code, setCode, err, onGo }) {
 // 📝 INSIGHTS
 // ─────────────────────────────────────────────────────────
 function InsightsView({ insights, setInsights }) {
-  const [saving, setSaving]   = useState(false);
-  const [saved, setSaved]     = useState(false);
-  const [editing, setEditing] = useState(null);
-  const [draft, setDraft]     = useState("");
+  const [saving, setSaving]       = useState(false);
+  const [saved, setSaved]         = useState(false);
+  const [editing, setEditing]     = useState(null);
+  const [draft, setDraft]         = useState("");
+  const [tab, setTab]             = useState("insights"); // insights | responses
+  const [allResps, setAllResps]   = useState([]);
+  const [loadingR, setLoadingR]   = useState(false);
+  const [deleting, setDeleting]   = useState(null);
+  const [confirmDel, setConfirmDel] = useState(null);
+
+  const loadResps = async () => {
+    setLoadingR(true);
+    const rows = await db.loadResponsesWithIds();
+    setAllResps(rows);
+    setLoadingR(false);
+  };
+
+  useEffect(() => { if (tab === "responses") loadResps(); }, [tab]);
 
   const startEdit = (id, curr) => { setEditing(id); setDraft(curr||""); };
   const doSave = async () => {
@@ -645,17 +677,75 @@ function InsightsView({ insights, setInsights }) {
     setTimeout(()=>setSaved(false), 2000);
   };
 
+  const doDelete = async (id) => {
+    setDeleting(id);
+    await db.deleteResponse(id);
+    setAllResps(prev => prev.filter(r => r.id !== id));
+    setDeleting(null); setConfirmDel(null);
+  };
+
   return (
     <div style={{ maxWidth:560, margin:"0 auto", padding:"24px 20px 80px", animation:"slideUp .3s ease" }}>
       <div style={{ marginBottom:24 }}>
         <div style={{ display:"flex", gap:8, marginBottom:12, flexWrap:"wrap" }}>
           <Pill color={C.violet} filled>privado</Pill>
-          <Pill color={C.violet}>mis insights</Pill>
           {saved && <Pill color={C.green} filled>guardado ✓</Pill>}
         </div>
-        <h2 style={{ fontSize:26, fontWeight:900, margin:0, letterSpacing:"-0.6px" }}>Observaciones</h2>
-        <p style={{ fontSize:13, color:C.sub, margin:"4px 0 0", fontWeight:500 }}>Anotá insights por pregunta. Solo los ves vos.</p>
+        <h2 style={{ fontSize:26, fontWeight:900, margin:0, letterSpacing:"-0.6px" }}>Panel privado</h2>
+        <p style={{ fontSize:13, color:C.sub, margin:"4px 0 0", fontWeight:500 }}>Solo lo ves vos.</p>
       </div>
+
+      {/* Tabs */}
+      <div style={{ display:"flex", gap:8, marginBottom:24 }}>
+        {[["insights","✏️ insights"],["responses","🗑️ respuestas"]].map(([t,l]) => (
+          <button key={t} onClick={()=>setTab(t)}
+            style={{ flex:1, padding:"12px", border:`1.5px solid ${tab===t ? C.violet : C.border}`, borderRadius:12, background:tab===t ? C.violet+"22" : "transparent", color:tab===t ? C.violet : C.sub, fontSize:14, fontWeight:800, cursor:"pointer", fontFamily:"inherit", transition:"all .15s" }}>
+            {l}
+          </button>
+        ))}
+      </div>
+
+      {/* Respuestas con borrar */}
+      {tab === "responses" && (
+        <div>
+          {loadingR && <p style={{ color:C.sub, textAlign:"center", padding:40 }}>Cargando…</p>}
+          {!loadingR && allResps.length === 0 && <p style={{ color:C.sub, textAlign:"center", padding:40 }}>No hay respuestas todavía.</p>}
+          {!loadingR && allResps.map((r, i) => (
+            <div key={r.id} style={{ marginBottom:10, border:`1px solid ${confirmDel===r.id ? "#FF4444" : C.border}`, borderRadius:14, background:C.card, padding:"14px 16px" }}>
+              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
+                <span style={{ fontSize:12, fontWeight:700, color:C.sub }}>Respuesta #{allResps.length - i}</span>
+                <span style={{ fontSize:11, color:C.sub }}>{new Date(r.created_at).toLocaleDateString("es-AR", { day:"2-digit", month:"short", hour:"2-digit", minute:"2-digit" })}</span>
+              </div>
+              <div style={{ fontSize:13, color:C.sub, marginBottom:10, lineHeight:1.4 }}>
+                {Object.entries(r.data||{}).slice(0,3).map(([k,v]) => (
+                  <div key={k}><span style={{ color:C.ink, fontWeight:600 }}>{k}:</span> {Array.isArray(v) ? v.join(", ") : String(v)}</div>
+                ))}
+                {Object.keys(r.data||{}).length > 3 && <div style={{ color:C.violet, fontSize:12, marginTop:4 }}>+{Object.keys(r.data).length - 3} preguntas más</div>}
+              </div>
+              {confirmDel === r.id ? (
+                <div style={{ display:"flex", gap:8 }}>
+                  <button onClick={()=>doDelete(r.id)} disabled={deleting===r.id}
+                    style={{ flex:1, padding:"10px", background:"#FF4444", border:"none", borderRadius:10, color:"#fff", fontSize:13, fontWeight:800, cursor:"pointer", fontFamily:"inherit" }}>
+                    {deleting===r.id ? "Borrando…" : "Confirmar borrar"}
+                  </button>
+                  <button onClick={()=>setConfirmDel(null)}
+                    style={{ padding:"10px 14px", border:`1px solid ${C.border}`, borderRadius:10, background:"transparent", color:C.sub, fontSize:13, cursor:"pointer", fontFamily:"inherit" }}>
+                    Cancelar
+                  </button>
+                </div>
+              ) : (
+                <button onClick={()=>setConfirmDel(r.id)}
+                  style={{ fontSize:12, fontWeight:700, color:"#FF4444", background:"transparent", border:`1px solid #FF444433`, borderRadius:8, padding:"5px 12px", cursor:"pointer", fontFamily:"inherit" }}>
+                  🗑️ Borrar
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Insights por pregunta */}
+      {tab === "insights" && <div>
 
       {Q.map(q => {
         const hasInsight = insights[q.id]?.trim();
@@ -689,6 +779,7 @@ function InsightsView({ insights, setInsights }) {
           </div>
         );
       })}
+      </div>}
     </div>
   );
 }
