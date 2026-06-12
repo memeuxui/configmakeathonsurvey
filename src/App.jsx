@@ -142,7 +142,7 @@ const Q = [
     text:"¿Con qué frecuencia te reunís en persona con amigos, familiares o compañeros?",
     options:["Más de una vez a la semana","Una vez a la semana","Cada 15 días","Una vez al mes"] },
   { id:"otros_usan_celu", section:null, type:"single",
-    text:"En esas reuniones, ¿notás que alguien usa el celular?",
+    text:"Notás cuando alguien se pone a usar el celular?",
     options:["Sí, mucho","Sí, pero poco","No lo usan","No lo he notado"],
     logic:a=>(a==="No lo usan"||a==="No lo he notado")?"yo_uso_celu":"molestia_nivel" },
   { id:"molestia_nivel", section:null, type:"single", text:"¿Qué tan molesto te resulta?",
@@ -283,10 +283,12 @@ export default function App() {
       `}</style>
 
       {/* ── NAV ── */}
-      <nav style={{ position:"sticky", top:0, zIndex:20, background:"rgba(12,11,20,0.85)", backdropFilter:"blur(16px)", WebkitBackdropFilter:"blur(16px)", borderBottom:`1px solid ${C.border}`, padding:"13px 20px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-        <div style={{ display:"flex", alignItems:"center", gap:8 }}>
-          <span style={{ fontWeight:900, fontSize:14, color:C.ink, letterSpacing:"-0.4px" }}>¿cómo jugamos juntos?</span>
-          <span style={{ width:6, height:6, borderRadius:"50%", background:C.primary, display:"inline-block" }}/>
+      <nav style={{ position:"sticky", top:0, zIndex:20, background:"rgba(12,11,20,0.85)", backdropFilter:"blur(16px)", WebkitBackdropFilter:"blur(16px)", borderBottom:"1px solid rgba(255,255,255,0.04)", padding:"13px 20px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+        <div style={{ display:"flex", gap:0 }}>
+          {screen==="results" || screen==="insightLogin" || screen==="insights"
+            ? <><Pill color={C.primary} filled weight={600}>investigación</Pill><Pill color={C.primary} weight={300}>encuesta</Pill></>
+            : <span style={{ width:7, height:7, borderRadius:"50%", background:C.primary, display:"inline-block", alignSelf:"center" }}/>
+          }
         </div>
         <div style={{ display:"flex", gap:8 }}>
           {screen!=="home" && <Btn small outline color={C.sub} onClick={()=>setScreen("home")}>inicio</Btn>}
@@ -313,12 +315,11 @@ function HomeScreen({ onSurvey, onResults }) {
     <div style={{ maxWidth:480, margin:"0 auto", padding:"32px 20px 80px", animation:"slideUp .3s ease" }}>
 
       {/* Hero card */}
-      <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:24, padding:"28px 24px", marginBottom:14 }}>
+      <div style={{ background:C.card, border:"none", borderRadius:24, padding:"28px 24px", marginBottom:14 }}>
         <div style={{ display:"flex", gap:0, flexWrap:"wrap", marginBottom:20 }}>
           <Pill color={C.primary} filled weight={600}>investigación</Pill>
           <Pill color={C.primary} weight={300}>encuesta</Pill>
         </div>
-
         <h1 style={{ fontSize:36, fontWeight:300, lineHeight:1.15, margin:"0 0 10px", letterSpacing:"-0.5px", color:C.ink, fontFamily:"'Lexend Deca',sans-serif" }}>
           ¿Cómo afecta el <strong style={{ fontWeight:600 }}>uso del celular</strong> en reuniones sociales?
         </h1>
@@ -329,7 +330,7 @@ function HomeScreen({ onSurvey, onResults }) {
       {/* Stats strip */}
       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:10, marginBottom:14 }}>
         {[["~3 min","DURACIÓN"],["100%","ANÓNIMO"],["~20","PREGUNTAS"]].map(([v,l])=>(
-          <div key={l} style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:16, padding:"18px 10px", textAlign:"center" }}>
+          <div key={l} style={{ background:C.card, border:"none", borderRadius:16, padding:"18px 10px", textAlign:"center" }}>
             <div style={{ fontSize:22, fontWeight:800, color:C.ink, letterSpacing:"-0.5px" }}>{v}</div>
             <div style={{ fontSize:10, fontWeight:600, color:C.sub, marginTop:4, letterSpacing:"0.08em" }}>{l}</div>
           </div>
@@ -441,7 +442,7 @@ function SurveyView({ onDone }) {
                 </button>
               );
             })}
-            {idx>0 && <button onClick={goBack} style={{ marginTop:4, padding:"13px", border:`1px solid ${C.border}`, borderRadius:14, background:"transparent", color:C.sub, fontSize:14, cursor:"pointer", fontFamily:"inherit", fontWeight:700 }}>← Atrás</button>}
+            {idx>0 && <button onClick={goBack} style={{ marginTop:4, padding:"13px", border:"none", borderRadius:14, background:"transparent", color:C.sub, fontSize:14, cursor:"pointer", fontFamily:"inherit", fontWeight:700 }}>← Atrás</button>}
           </div>
         )}
 
@@ -462,7 +463,7 @@ function SurveyView({ onDone }) {
             <div style={{ display:"flex", justifyContent:"space-between", fontSize:12, fontWeight:700, color:C.sub, padding:"0 2px" }}>
               <span>{q.labelMin}</span><span>{q.labelMax}</span>
             </div>
-            {idx>0 && <button onClick={goBack} style={{ marginTop:12, width:"100%", padding:"12px", border:`1px solid ${C.border}`, borderRadius:14, background:"transparent", color:C.sub, fontSize:14, cursor:"pointer", fontFamily:"inherit", fontWeight:700 }}>← Atrás</button>}
+            {idx>0 && <button onClick={goBack} style={{ marginTop:12, width:"100%", padding:"12px", border:"none", borderRadius:14, background:"transparent", color:C.sub, fontSize:14, cursor:"pointer", fontFamily:"inherit", fontWeight:700 }}>← Atrás</button>}
           </div>
         )}
 
@@ -495,7 +496,7 @@ function SurveyView({ onDone }) {
       {isManual && (
         <div style={{ position:"fixed", bottom:0, left:"50%", transform:"translateX(-50%)", width:"100%", maxWidth:480, background:C.bg, borderTop:`1px solid ${C.border}`, padding:"14px 20px", display:"flex", gap:10, zIndex:10 }}>
           {idx>0 && (
-            <button onClick={goBack} style={{ padding:"16px 18px", border:`1px solid ${C.border}`, borderRadius:14, background:"transparent", color:C.sub, fontSize:18, cursor:"pointer", fontFamily:"inherit", fontWeight:800, lineHeight:1, flexShrink:0 }}>←</button>
+            <button onClick={goBack} style={{ padding:"16px 18px", border:"none", borderRadius:14, background:"transparent", color:C.sub, fontSize:18, cursor:"pointer", fontFamily:"inherit", fontWeight:800, lineHeight:1, flexShrink:0 }}>←</button>
           )}
           <Btn onClick={()=>advance()} disabled={!canNext()} bg={ac} color={ac===C.cyan?"#0C0B14":"#fff"} fullWidth>
             {idx===total-1 ? "Enviar respuestas →" : "Continuar →"}
@@ -512,7 +513,7 @@ function SurveyView({ onDone }) {
 function ThanksScreen({ onBack }) {
   return (
     <div style={{ maxWidth:480, margin:"0 auto", padding:"40px 20px", animation:"slideUp .3s ease" }}>
-      <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:24, padding:"40px 28px", textAlign:"center", marginBottom:14, position:"relative", overflow:"hidden" }}>
+      <div style={{ background:C.card, border:"none", borderRadius:24, padding:"40px 28px", textAlign:"center", marginBottom:14, position:"relative", overflow:"hidden" }}>
         <div style={{ position:"absolute", top:0, left:0, right:0, height:4, background:C.green }}/>
         <div style={{ fontSize:56, marginBottom:16 }}>🙌</div>
         <h2 style={{ fontSize:32, fontWeight:900, margin:"0 0 12px", letterSpacing:"-1px" }}>¡Gracias!</h2>
@@ -535,7 +536,7 @@ function ResultsView({ resps, loading }) {
   if (loading) return <div style={{ textAlign:"center", padding:80, color:C.sub, fontWeight:700 }}>Cargando resultados…</div>;
   if (!resps.length) return (
     <div style={{ maxWidth:480, margin:"40px auto", padding:"0 20px", textAlign:"center" }}>
-      <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:20, padding:48 }}>
+      <div style={{ background:C.card, border:"none", borderRadius:20, padding:48 }}>
         <div style={{ fontSize:48, marginBottom:12 }}>📭</div>
         <p style={{ color:C.sub, fontSize:16, fontWeight:700, margin:0 }}>Todavía no hay respuestas.</p>
       </div>
@@ -548,7 +549,7 @@ function ResultsView({ resps, loading }) {
     <div style={{ maxWidth:560, margin:"0 auto", padding:"24px 20px 80px", animation:"slideUp .3s ease" }}>
 
       {/* Header */}
-      <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:20, padding:"22px 22px", marginBottom:16, display:"flex", justifyContent:"space-between", alignItems:"center", position:"relative", overflow:"hidden" }}>
+      <div style={{ background:C.card, border:"none", borderRadius:20, padding:"22px 22px", marginBottom:16, display:"flex", justifyContent:"space-between", alignItems:"center", position:"relative", overflow:"hidden" }}>
         <div style={{ position:"absolute", top:0, left:0, right:0, height:3, background:`linear-gradient(90deg,${C.primary},${C.violet},${C.cyan})` }}/>
         <div style={{ paddingTop:8 }}>
           <div style={{ display:"flex", gap:8, marginBottom:10, flexWrap:"wrap" }}>
@@ -579,7 +580,7 @@ function ResultsView({ resps, loading }) {
         const ac = q.section ? (SECTION_COLORS[q.section]||C.primary) : C.primary;
         const isOpen = open===q.id;
         return (
-          <div key={q.id} style={{ marginBottom:8, border:`1px solid ${C.border}`, borderRadius:16, background:C.card, overflow:"hidden" }}>
+          <div key={q.id} style={{ marginBottom:8, border:"none", borderRadius:16, background:C.card, overflow:"hidden" }}>
             <button onClick={()=>setOpen(isOpen?null:q.id)}
               style={{ width:"100%", padding:"16px 18px", background:"none", border:"none", cursor:"pointer", display:"flex", justifyContent:"space-between", alignItems:"flex-start", textAlign:"left", gap:12, fontFamily:"inherit" }}>
               <div style={{ flex:1 }}>
@@ -587,7 +588,7 @@ function ResultsView({ resps, loading }) {
                 <div style={{ fontSize:14, fontWeight:600, color:C.ink, lineHeight:1.35 }}>{q.text}</div>
               </div>
               <div style={{ display:"flex", alignItems:"center", gap:8, flexShrink:0, paddingTop:2 }}>
-                <span style={{ fontSize:11, fontWeight:700, color:C.sub, background:C.card2, padding:"2px 8px", borderRadius:20, border:`1px solid ${C.border}` }}>{s.total}</span>
+                <span style={{ fontSize:11, fontWeight:700, color:C.sub, background:C.card2, padding:"2px 8px", borderRadius:20, border:"none" }}>{s.total}</span>
                 <span style={{ color:C.sub, fontSize:11, fontWeight:800 }}>{isOpen?"▲":"▼"}</span>
               </div>
             </button>
@@ -604,7 +605,7 @@ function ResultsView({ resps, loading }) {
       {tab==="open" && Q.filter(q=>q.type==="open").map(q => {
         const answers = resps.map(r=>r[q.id]).filter(a=>a&&a.trim());
         return (
-          <div key={q.id} style={{ marginBottom:12, border:`1px solid ${C.border}`, borderRadius:16, background:C.card, padding:"18px" }}>
+          <div key={q.id} style={{ marginBottom:12, border:"none", borderRadius:16, background:C.card, padding:"18px" }}>
             <div style={{ fontSize:14, fontWeight:700, color:C.ink, marginBottom:14, lineHeight:1.35 }}>{q.text}</div>
             {answers.length===0
               ? <p style={{ fontSize:13, color:C.sub, fontStyle:"italic", margin:0 }}>Sin respuestas todavía</p>
@@ -627,7 +628,7 @@ function ResultsView({ resps, loading }) {
 function InsightLogin({ code, setCode, err, onGo }) {
   return (
     <div style={{ maxWidth:360, margin:"0 auto", padding:"40px 20px", animation:"slideUp .3s ease" }}>
-      <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:24, padding:"32px 24px", textAlign:"center", marginBottom:14, position:"relative", overflow:"hidden" }}>
+      <div style={{ background:C.card, border:"none", borderRadius:24, padding:"32px 24px", textAlign:"center", marginBottom:14, position:"relative", overflow:"hidden" }}>
         <div style={{ position:"absolute", top:0, left:0, right:0, height:4, background:C.violet }}/>
         <div style={{ fontSize:44, marginBottom:16, marginTop:8 }}>✏️</div>
         <h2 style={{ fontSize:24, fontWeight:900, margin:"0 0 6px", letterSpacing:"-0.5px" }}>Agregar insights</h2>
@@ -726,7 +727,7 @@ function InsightsView({ insights, setInsights }) {
                     {deleting===r.id ? "Borrando…" : "Confirmar borrar"}
                   </button>
                   <button onClick={()=>setConfirmDel(null)}
-                    style={{ padding:"10px 14px", border:`1px solid ${C.border}`, borderRadius:10, background:"transparent", color:C.sub, fontSize:13, cursor:"pointer", fontFamily:"inherit" }}>
+                    style={{ padding:"10px 14px", border:"none", borderRadius:10, background:"transparent", color:C.sub, fontSize:13, cursor:"pointer", fontFamily:"inherit" }}>
                     Cancelar
                   </button>
                 </div>
@@ -759,7 +760,7 @@ function InsightsView({ insights, setInsights }) {
                   style={{ width:"100%", padding:"14px", border:`1.5px solid ${C.violet}`, borderRadius:10, fontSize:14, color:C.ink, background:C.card2, outline:"none", resize:"none", lineHeight:1.5, marginBottom:10 }}/>
                 <div style={{ display:"flex", gap:8 }}>
                   <Btn onClick={doSave} disabled={saving} bg={C.violet} color="#fff" fullWidth>{saving?"Guardando…":"Guardar"}</Btn>
-                  <button onClick={()=>setEditing(null)} style={{ padding:"16px", border:`1px solid ${C.border}`, borderRadius:12, background:"transparent", color:C.sub, fontSize:14, fontWeight:700, cursor:"pointer", fontFamily:"inherit" }}>✕</button>
+                  <button onClick={()=>setEditing(null)} style={{ padding:"16px", border:"none", borderRadius:12, background:"transparent", color:C.sub, fontSize:14, fontWeight:700, cursor:"pointer", fontFamily:"inherit" }}>✕</button>
                 </div>
               </div>
             ) : (
