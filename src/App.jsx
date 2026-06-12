@@ -237,7 +237,7 @@ function Btn({ children, onClick, bg, color, disabled, fullWidth, outline, small
         padding: small ? "8px 16px" : "16px 20px",
         background: disabled ? "rgba(255,255,255,0.06)" : outline ? "transparent" : bg,
         color: disabled ? "rgba(255,255,255,0.25)" : color,
-        border: outline ? `1.5px solid ${C.borderS}` : "none",
+        border: "none",
         borderRadius: 14, fontSize: small ? 13 : 16, fontWeight: 800,
         cursor: disabled ? "not-allowed" : "pointer", fontFamily:"inherit",
         width: fullWidth ? "100%" : "auto", lineHeight: 1.2,
@@ -286,7 +286,7 @@ export default function App() {
       <nav style={{ position:"sticky", top:0, zIndex:20, background:"rgba(12,11,20,0.85)", backdropFilter:"blur(16px)", WebkitBackdropFilter:"blur(16px)", borderBottom:"1px solid rgba(255,255,255,0.04)", padding:"13px 20px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
         <div style={{ display:"flex", gap:0 }}>
           {screen==="results" || screen==="insightLogin" || screen==="insights"
-            ? <><Pill color={C.primary} filled weight={600}>investigación</Pill><Pill color={C.primary} weight={300}>encuesta</Pill></>
+            ? <><Pill color={C.primary} filled weight={600}>investigación</Pill><Pill color={C.primary} weight={300}>resultados</Pill></>
             : <span style={{ width:7, height:7, borderRadius:"50%", background:C.primary, display:"inline-block", alignSelf:"center" }}/>
           }
         </div>
@@ -437,7 +437,7 @@ function SurveyView({ onDone }) {
               const sel = ans===o;
               return (
                 <button key={o} onClick={()=>selectAuto(o)} disabled={pending}
-                  style={{ padding:"16px 18px", border:`1.5px solid ${sel ? ac : C.border}`, borderRadius:14, background: sel ? ac : C.card, color: sel ? (ac===C.cyan||ac===C.yellow||ac===C.green ? "#0C0B14" : "#fff") : C.ink, fontSize:15, textAlign:"left", cursor:pending?"default":"pointer", fontWeight:sel?800:500, transition:"all .18s", lineHeight:1.3, minHeight:54, fontFamily:"inherit" }}>
+                  style={{ padding:"16px 18px", border:"none", borderRadius:14, background: sel ? ac : C.card, color: sel ? (ac===C.cyan||ac===C.yellow||ac===C.green ? "#0C0B14" : "#fff") : C.ink, fontSize:15, textAlign:"left", cursor:pending?"default":"pointer", fontWeight:sel?800:500, transition:"all .18s", lineHeight:1.3, minHeight:54, fontFamily:"inherit" }}>
                   {o}
                 </button>
               );
@@ -454,7 +454,7 @@ function SurveyView({ onDone }) {
                 const sel = ans===n;
                 return (
                   <button key={n} onClick={()=>selectAuto(n)} disabled={pending}
-                    style={{ flex:1, height:68, border:`1.5px solid ${sel ? ac : C.border}`, borderRadius:14, background:sel ? ac : C.card, color:sel ? (ac===C.cyan ? "#0C0B14" : "#fff") : C.ink, fontSize:26, fontWeight:900, cursor:pending?"default":"pointer", transition:"all .18s", fontFamily:"inherit" }}>
+                    style={{ flex:1, height:68, border:"none", borderRadius:14, background:sel ? ac : C.card, color:sel ? (ac===C.cyan ? "#0C0B14" : "#fff") : C.ink, fontSize:26, fontWeight:900, cursor:pending?"default":"pointer", transition:"all .18s", fontFamily:"inherit" }}>
                     {n}
                   </button>
                 );
@@ -474,7 +474,7 @@ function SurveyView({ onDone }) {
               const sel = (ans||[]).includes(o);
               return (
                 <button key={o} onClick={()=>{ const c=ans||[]; set(sel?c.filter(x=>x!==o):[...c,o]); }}
-                  style={{ padding:"16px 18px", border:`1.5px solid ${sel ? ac : C.border}`, borderRadius:14, background:sel ? ac : C.card, color:sel ? (ac===C.cyan ? "#0C0B14" : "#fff") : C.ink, fontSize:15, textAlign:"left", cursor:"pointer", transition:"all .18s", lineHeight:1.3, minHeight:54, display:"flex", alignItems:"center", gap:12, fontFamily:"inherit" }}>
+                  style={{ padding:"16px 18px", border:"none", borderRadius:14, background:sel ? ac : C.card, color:sel ? (ac===C.cyan ? "#0C0B14" : "#fff") : C.ink, fontSize:15, textAlign:"left", cursor:"pointer", transition:"all .18s", lineHeight:1.3, minHeight:54, display:"flex", alignItems:"center", gap:12, fontFamily:"inherit" }}>
                   <span style={{ width:22, height:22, border:`1.5px solid ${sel ? "rgba(255,255,255,0.6)" : C.borderS}`, borderRadius:6, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
                     {sel && <span style={{ fontSize:13, fontWeight:900 }}>✓</span>}
                   </span>
@@ -488,13 +488,13 @@ function SurveyView({ onDone }) {
         {/* OPEN — botón continuar */}
         {q.type==="open" && (
           <textarea placeholder={q.placeholder} value={ans||""} onChange={e=>set(e.target.value)} rows={5}
-            style={{ width:"100%", padding:"16px", border:`1.5px solid ${(ans&&ans.length>0) ? ac : C.border}`, borderRadius:14, fontSize:15, color:C.ink, background:C.card, outline:"none", resize:"none", lineHeight:1.6, transition:"border-color .15s" }}/>
+            style={{ width:"100%", padding:"16px", border:`1.5px solid ${(ans&&ans.length>0) ? ac : "transparent"}`, borderRadius:14, fontSize:15, color:C.ink, background:C.card, outline:"none", resize:"none", lineHeight:1.6, transition:"border-color .15s" }}/>
         )}
       </div>
 
       {/* Fixed nav — solo multi y open */}
       {isManual && (
-        <div style={{ position:"fixed", bottom:0, left:"50%", transform:"translateX(-50%)", width:"100%", maxWidth:480, background:C.bg, borderTop:`1px solid ${C.border}`, padding:"14px 20px", display:"flex", gap:10, zIndex:10 }}>
+        <div style={{ position:"fixed", bottom:0, left:"50%", transform:"translateX(-50%)", width:"100%", maxWidth:480, background:C.bg, borderTop:"none", padding:"14px 20px", display:"flex", gap:10, zIndex:10 }}>
           {idx>0 && (
             <button onClick={goBack} style={{ padding:"16px 18px", border:"none", borderRadius:14, background:"transparent", color:C.sub, fontSize:18, cursor:"pointer", fontFamily:"inherit", fontWeight:800, lineHeight:1, flexShrink:0 }}>←</button>
           )}
@@ -552,12 +552,8 @@ function ResultsView({ resps, loading }) {
       <div style={{ background:C.card, border:"none", borderRadius:20, padding:"22px 22px", marginBottom:16, display:"flex", justifyContent:"space-between", alignItems:"center", position:"relative", overflow:"hidden" }}>
         <div style={{ position:"absolute", top:0, left:0, right:0, height:3, background:`linear-gradient(90deg,${C.primary},${C.violet},${C.cyan})` }}/>
         <div style={{ paddingTop:8 }}>
-          <div style={{ display:"flex", gap:8, marginBottom:10, flexWrap:"wrap" }}>
-            <Pill color={C.green} filled>resultados</Pill>
-            <Pill color={C.cyan}>público</Pill>
-          </div>
-          <h2 style={{ fontSize:20, fontWeight:900, margin:0, letterSpacing:"-0.5px" }}>¿Cómo jugamos juntos?</h2>
-          <p style={{ fontSize:13, color:C.sub, margin:"4px 0 0", fontWeight:500 }}>{resps.length} respuesta{resps.length!==1?"s":""} recibida{resps.length!==1?"s":""}</p>
+          <h2 style={{ fontSize:20, fontWeight:300, margin:"0 0 6px", letterSpacing:"-0.3px", fontFamily:"'Lexend Deca',sans-serif" }}>¿Cómo afecta el <strong style={{ fontWeight:600 }}>uso del celular</strong> en reuniones sociales?</h2>
+          <p style={{ fontSize:13, color:C.sub, margin:0, fontWeight:500 }}>{resps.length} respuesta{resps.length!==1?"s":""} recibida{resps.length!==1?"s":""}</p>
         </div>
         <div style={{ background:C.primary, color:"#fff", padding:"12px 18px", borderRadius:14, fontSize:30, fontWeight:900, flexShrink:0 }}>
           {resps.length}
@@ -568,7 +564,7 @@ function ResultsView({ resps, loading }) {
       <div style={{ display:"flex", gap:8, marginBottom:16 }}>
         {[["charts","📊 gráficos"],["open","💬 abiertas"]].map(([t,l]) => (
           <button key={t} onClick={()=>setTab(t)}
-            style={{ flex:1, padding:"12px", border:`1.5px solid ${tab===t ? C.primary : C.border}`, borderRadius:12, background: tab===t ? C.primary+"22" : "transparent", color: tab===t ? C.primary : C.sub, fontSize:14, fontWeight:800, cursor:"pointer", fontFamily:"inherit", transition:"all .15s" }}>
+            style={{ flex:1, padding:"12px", border:`1.5px solid ${tab===t ? C.primary : "transparent"}`, borderRadius:12, background: tab===t ? C.primary+"22" : "transparent", color: tab===t ? C.primary : C.sub, fontSize:14, fontWeight:800, cursor:"pointer", fontFamily:"inherit", transition:"all .15s" }}>
             {l}
           </button>
         ))}
@@ -593,7 +589,7 @@ function ResultsView({ resps, loading }) {
               </div>
             </button>
             {isOpen && (
-              <div style={{ padding:"4px 18px 20px", borderTop:`1px solid ${C.border}` }}>
+              <div style={{ padding:"4px 18px 20px", borderTop:"none" }}>
                 <div style={{ height:12 }}/>
                 {q.type==="scale" ? <ScaleChart data={s} color={ac}/> : <BarChart data={s} color={ac}/>}
               </div>
@@ -636,7 +632,7 @@ function InsightLogin({ code, setCode, err, onGo }) {
       </div>
       <input type="password" placeholder="Código de acceso" value={code}
         onChange={e=>setCode(e.target.value)} onKeyDown={e=>e.key==="Enter"&&onGo()}
-        style={{ width:"100%", padding:"16px", border:`1.5px solid ${err?"#FF4444":C.border}`, borderRadius:14, fontSize:16, outline:"none", background:C.card, color:C.ink, marginBottom:8 }}/>
+        style={{ width:"100%", padding:"16px", border:`1.5px solid ${err?"#FF4444":"transparent"}`, borderRadius:14, fontSize:16, outline:"none", background:C.card, color:C.ink, marginBottom:8 }}/>
       {err && <p style={{ fontSize:13, color:"#FF4444", marginBottom:8, fontWeight:700 }}>Código incorrecto</p>}
       <Btn onClick={onGo} bg={C.violet} color="#fff" fullWidth>Ingresar</Btn>
     </div>
@@ -697,7 +693,7 @@ function InsightsView({ insights, setInsights }) {
       <div style={{ display:"flex", gap:8, marginBottom:24 }}>
         {[["insights","✏️ insights"],["responses","🗑️ respuestas"]].map(([t,l]) => (
           <button key={t} onClick={()=>setTab(t)}
-            style={{ flex:1, padding:"12px", border:`1.5px solid ${tab===t ? C.violet : C.border}`, borderRadius:12, background:tab===t ? C.violet+"22" : "transparent", color:tab===t ? C.violet : C.sub, fontSize:14, fontWeight:800, cursor:"pointer", fontFamily:"inherit", transition:"all .15s" }}>
+            style={{ flex:1, padding:"12px", border:`1.5px solid ${tab===t ? C.violet : "transparent"}`, borderRadius:12, background:tab===t ? C.violet+"22" : "transparent", color:tab===t ? C.violet : C.sub, fontSize:14, fontWeight:800, cursor:"pointer", fontFamily:"inherit", transition:"all .15s" }}>
             {l}
           </button>
         ))}
@@ -709,7 +705,7 @@ function InsightsView({ insights, setInsights }) {
           {loadingR && <p style={{ color:C.sub, textAlign:"center", padding:40 }}>Cargando…</p>}
           {!loadingR && allResps.length === 0 && <p style={{ color:C.sub, textAlign:"center", padding:40 }}>No hay respuestas todavía.</p>}
           {!loadingR && allResps.map((r, i) => (
-            <div key={r.id} style={{ marginBottom:10, border:`1px solid ${confirmDel===r.id ? "#FF4444" : C.border}`, borderRadius:14, background:C.card, padding:"14px 16px" }}>
+            <div key={r.id} style={{ marginBottom:10, border:`1px solid ${confirmDel===r.id ? "#FF4444" : "transparent"}`, borderRadius:14, background:C.card, padding:"14px 16px" }}>
               <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:8 }}>
                 <span style={{ fontSize:12, fontWeight:700, color:C.sub }}>Respuesta #{allResps.length - i}</span>
                 <span style={{ fontSize:11, color:C.sub }}>{new Date(r.created_at).toLocaleDateString("es-AR", { day:"2-digit", month:"short", hour:"2-digit", minute:"2-digit" })}</span>
@@ -750,7 +746,7 @@ function InsightsView({ insights, setInsights }) {
         const isEditing  = editing===q.id;
         const ac = q.section ? (SECTION_COLORS[q.section]||C.violet) : C.violet;
         return (
-          <div key={q.id} style={{ marginBottom:8, border:`1px solid ${isEditing ? C.violet : C.border}`, borderRadius:16, background:C.card, padding:"16px 18px", transition:"border-color .15s" }}>
+          <div key={q.id} style={{ marginBottom:8, border:`1px solid ${isEditing ? C.violet : "transparent"}`, borderRadius:16, background:C.card, padding:"16px 18px", transition:"border-color .15s" }}>
             {q.section && <div style={{ marginBottom:8 }}><Pill color={ac} filled>{q.section}</Pill></div>}
             <p style={{ fontSize:14, fontWeight:600, color:C.ink, margin:"0 0 12px", lineHeight:1.35 }}>{q.text}</p>
             {isEditing ? (
@@ -767,7 +763,7 @@ function InsightsView({ insights, setInsights }) {
               <div>
                 {hasInsight
                   ? <div style={{ padding:"12px 14px", background:C.violet+"22", borderRadius:10, borderLeft:`3px solid ${C.violet}`, fontSize:14, color:C.sub, lineHeight:1.5, marginBottom:10 }}>{insights[q.id]}</div>
-                  : <p style={{ fontSize:13, color:C.border, fontStyle:"italic", margin:"0 0 10px" }}>Sin insight todavía</p>}
+                  : <p style={{ fontSize:13, color:C.sub, fontStyle:"italic", margin:"0 0 10px" }}>Sin insight todavía</p>}
                 <button onClick={()=>startEdit(q.id, insights[q.id])}
                   style={{ fontSize:13, fontWeight:700, color:C.violet, background:"transparent", border:`1px solid ${C.violet}44`, borderRadius:8, padding:"6px 14px", cursor:"pointer", fontFamily:"inherit" }}>
                   {hasInsight?"Editar ✏️":"+ Agregar insight"}
