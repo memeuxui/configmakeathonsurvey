@@ -108,15 +108,16 @@ const db = {
 // 🎨 TOKENS — meme.uxui dark aesthetic (Figma-matched)
 // ─────────────────────────────────────────────────────────
 const C = {
-  bg:      "#0C0B14",
-  card:    "#151220",
-  card2:   "#1C1929",
-  border:  "rgba(255,255,255,0.08)",
-  borderS: "rgba(255,255,255,0.15)",
+  bg:      "#07111C",
+  card:    "#0D1B26",
+  card2:   "#122030",
+  border:  "rgba(255,255,255,0.07)",
+  borderS: "rgba(255,255,255,0.12)",
   ink:     "#FFFFFF",
-  sub:     "rgba(255,255,255,0.5)",
-  pink:    "#FF4D9D",
-  cyan:    "#00D4C8",
+  sub:     "rgba(255,255,255,0.45)",
+  primary: "#168AB2",
+  pink:    "#168AB2",
+  cyan:    "#168AB2",
   green:   "#7FE547",
   yellow:  "#FFE14D",
   violet:  "#8B5CF6",
@@ -124,7 +125,7 @@ const C = {
 };
 
 const SECTION_COLORS = {
-  "reuniones":     C.pink,
+  "reuniones":     C.primary,
   "juegos de mesa": C.cyan,
   "para cerrar":   C.violet,
 };
@@ -209,15 +210,15 @@ function buildFlow(answers) {
 // ─────────────────────────────────────────────────────────
 // 🧩 SHARED UI COMPONENTS
 // ─────────────────────────────────────────────────────────
-function Pill({ color, filled, children }) {
+function Pill({ color, filled, children, weight }) {
   return (
     <span style={{
       display:"inline-flex", alignItems:"center",
       background: filled ? color : "transparent",
-      color: filled ? (color===C.yellow||color===C.green||color===C.cyan ? "#0C0B14" : "#fff") : color,
+      color: filled ? "#07111C" : color,
       border: `1.5px solid ${color}`,
       padding:"4px 12px", borderRadius:99,
-      fontSize:11, fontWeight:800, letterSpacing:"0.05em", textTransform:"lowercase",
+      fontSize:11, fontWeight: weight || 700, letterSpacing:"0.04em", textTransform:"lowercase",
     }}>
       {children}
     </span>
@@ -271,8 +272,9 @@ export default function App() {
   };
 
   return (
-    <div style={{ minHeight:"100vh", background:C.bg, fontFamily:"'Inter',system-ui,sans-serif", WebkitFontSmoothing:"antialiased", color:C.ink }}>
+    <div style={{ minHeight:"100vh", background:C.bg, fontFamily:"'Schibsted Grotesk','Inter',system-ui,sans-serif", WebkitFontSmoothing:"antialiased", color:C.ink }}>
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@300;400;500;600;700;800;900&family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap');
         * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
         @keyframes popIn { from{opacity:0;transform:scale(.95)} to{opacity:1;transform:scale(1)} }
         @keyframes slideUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
@@ -284,7 +286,7 @@ export default function App() {
       <nav style={{ position:"sticky", top:0, zIndex:20, background:"rgba(12,11,20,0.85)", backdropFilter:"blur(16px)", WebkitBackdropFilter:"blur(16px)", borderBottom:`1px solid ${C.border}`, padding:"13px 20px", display:"flex", justifyContent:"space-between", alignItems:"center" }}>
         <div style={{ display:"flex", alignItems:"center", gap:8 }}>
           <span style={{ fontWeight:900, fontSize:14, color:C.ink, letterSpacing:"-0.4px" }}>¿cómo jugamos juntos?</span>
-          <span style={{ width:6, height:6, borderRadius:"50%", background:C.pink, display:"inline-block" }}/>
+          <span style={{ width:6, height:6, borderRadius:"50%", background:C.primary, display:"inline-block" }}/>
         </div>
         <div style={{ display:"flex", gap:8 }}>
           {screen!=="home" && <Btn small outline color={C.sub} onClick={()=>setScreen("home")}>inicio</Btn>}
@@ -311,45 +313,39 @@ function HomeScreen({ onSurvey, onResults }) {
     <div style={{ maxWidth:480, margin:"0 auto", padding:"32px 20px 80px", animation:"slideUp .3s ease" }}>
 
       {/* Hero card */}
-      <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:24, padding:"28px 24px", marginBottom:14, position:"relative", overflow:"hidden" }}>
-        {/* Decorative colored bar top */}
-        <div style={{ position:"absolute", top:0, left:0, right:0, height:4, background:`linear-gradient(90deg,${C.pink},${C.violet},${C.cyan})` }}/>
-
-        <div style={{ display:"flex", gap:8, flexWrap:"wrap", marginBottom:18, marginTop:8 }}>
-          <Pill color={C.pink} filled>investigación</Pill>
-          <Pill color={C.cyan}>ux research</Pill>
-          <Pill color={C.violet}>encuesta</Pill>
+      <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:24, padding:"28px 24px", marginBottom:14 }}>
+        <div style={{ display:"flex", gap:0, flexWrap:"wrap", marginBottom:20 }}>
+          <Pill color={C.primary} filled weight={600}>investigación</Pill>
+          <Pill color={C.primary} weight={300}>encuesta</Pill>
         </div>
 
-        <h1 style={{ fontSize:38, fontWeight:900, lineHeight:1.05, margin:"0 0 14px", letterSpacing:"-1.5px", color:C.ink }}>
-          El celular<br/><span style={{ color:C.pink }}>en la mesa.</span>
+        <h1 style={{ fontSize:36, fontWeight:300, lineHeight:1.15, margin:"0 0 10px", letterSpacing:"-0.5px", color:C.ink, fontFamily:"'Lexend Deca',sans-serif" }}>
+          ¿Cómo afecta el <strong style={{ fontWeight:600 }}>uso del celular</strong> en reuniones sociales?
         </h1>
 
-        <p style={{ fontSize:15, color:C.sub, lineHeight:1.65, margin:0 }}>
-          ¿Cómo afecta el uso del celular a las reuniones sociales y los juegos de mesa? Son 3 minutos y es anónimo.
-        </p>
+        <p style={{ fontSize:14, color:C.sub, margin:0, fontWeight:500 }}>#configmakeathon</p>
       </div>
 
       {/* Stats strip */}
       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:10, marginBottom:14 }}>
-        {[[C.pink,"~3 min","duración"],[C.cyan,"100%","anónimo"],[C.violet,"~20","preguntas"]].map(([bg,v,l])=>(
-          <div key={l} style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:16, padding:"16px 10px", textAlign:"center" }}>
-            <div style={{ fontSize:18, fontWeight:900, color:bg, letterSpacing:"-0.5px" }}>{v}</div>
-            <div style={{ fontSize:11, fontWeight:600, color:C.sub, marginTop:3 }}>{l}</div>
+        {[["~3 min","DURACIÓN"],["100%","ANÓNIMO"],["~20","PREGUNTAS"]].map(([v,l])=>(
+          <div key={l} style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:16, padding:"18px 10px", textAlign:"center" }}>
+            <div style={{ fontSize:22, fontWeight:800, color:C.ink, letterSpacing:"-0.5px" }}>{v}</div>
+            <div style={{ fontSize:10, fontWeight:600, color:C.sub, marginTop:4, letterSpacing:"0.08em" }}>{l}</div>
           </div>
         ))}
       </div>
 
       {/* CTAs */}
       <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
-        <Btn onClick={onSurvey} bg={C.pink} color="#fff" fullWidth>Responder encuesta →</Btn>
+        <Btn onClick={onSurvey} bg={C.primary} color="#fff" fullWidth>Responder encuesta →</Btn>
         <Btn onClick={onResults} outline color={C.sub} fullWidth>Ver resultados 📊</Btn>
       </div>
 
       {!isConfigured && (
         <div style={{ marginTop:20, padding:"12px 16px", background:"rgba(255,227,77,0.08)", border:`1px solid ${C.yellow}44`, borderRadius:12 }}>
           <p style={{ fontSize:12, color:C.yellow, margin:0, fontWeight:600 }}>
-            ⚠️ Preview mode — usando almacenamiento local.<br/>Configurá Supabase en el archivo para producción.
+            ⚠️ Preview mode — usando almacenamiento local.
           </p>
         </div>
       )}
@@ -373,7 +369,7 @@ function SurveyView({ onDone }) {
   const q     = Q.find(x=>x.id===qid);
   const ans   = answers[qid];
   const total = flow.length;
-  const ac    = q?.section ? (SECTION_COLORS[q.section]||C.pink) : C.pink;
+  const ac    = q?.section ? (SECTION_COLORS[q.section]||C.primary) : C.primary;
 
   const canNext = () => {
     if (!q) return false;
@@ -425,7 +421,7 @@ function SurveyView({ onDone }) {
           <span style={{ position:"absolute", top:-14, left:-4, fontSize:100, fontWeight:900, color:ac, opacity:.07, lineHeight:1, userSelect:"none", pointerEvents:"none", zIndex:0 }}>
             {String(idx+1).padStart(2,"0")}
           </span>
-          <h2 style={{ position:"relative", zIndex:1, fontSize:22, fontWeight:800, color:C.ink, lineHeight:1.3, margin:0, paddingTop:10, letterSpacing:"-0.5px" }}>
+          <h2 style={{ position:"relative", zIndex:1, fontSize:22, fontWeight:800, color:C.ink, lineHeight:1.3, margin:0, paddingTop:10, letterSpacing:"-0.5px", fontFamily:"'Lexend Deca',sans-serif" }}>
             {q.text}
           </h2>
         </div>
@@ -524,7 +520,7 @@ function ThanksScreen({ onBack }) {
           Tus respuestas son anónimas y me ayudan un montón para la investigación. ✨
         </p>
       </div>
-      <Btn onClick={onBack} bg={C.pink} color="#fff" fullWidth>Volver al inicio</Btn>
+      <Btn onClick={onBack} bg={C.primary} color="#fff" fullWidth>Volver al inicio</Btn>
     </div>
   );
 }
@@ -553,7 +549,7 @@ function ResultsView({ resps, loading }) {
 
       {/* Header */}
       <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:20, padding:"22px 22px", marginBottom:16, display:"flex", justifyContent:"space-between", alignItems:"center", position:"relative", overflow:"hidden" }}>
-        <div style={{ position:"absolute", top:0, left:0, right:0, height:3, background:`linear-gradient(90deg,${C.pink},${C.violet},${C.cyan})` }}/>
+        <div style={{ position:"absolute", top:0, left:0, right:0, height:3, background:`linear-gradient(90deg,${C.primary},${C.violet},${C.cyan})` }}/>
         <div style={{ paddingTop:8 }}>
           <div style={{ display:"flex", gap:8, marginBottom:10, flexWrap:"wrap" }}>
             <Pill color={C.green} filled>resultados</Pill>
@@ -562,7 +558,7 @@ function ResultsView({ resps, loading }) {
           <h2 style={{ fontSize:20, fontWeight:900, margin:0, letterSpacing:"-0.5px" }}>¿Cómo jugamos juntos?</h2>
           <p style={{ fontSize:13, color:C.sub, margin:"4px 0 0", fontWeight:500 }}>{resps.length} respuesta{resps.length!==1?"s":""} recibida{resps.length!==1?"s":""}</p>
         </div>
-        <div style={{ background:C.pink, color:"#fff", padding:"12px 18px", borderRadius:14, fontSize:30, fontWeight:900, flexShrink:0 }}>
+        <div style={{ background:C.primary, color:"#fff", padding:"12px 18px", borderRadius:14, fontSize:30, fontWeight:900, flexShrink:0 }}>
           {resps.length}
         </div>
       </div>
@@ -571,7 +567,7 @@ function ResultsView({ resps, loading }) {
       <div style={{ display:"flex", gap:8, marginBottom:16 }}>
         {[["charts","📊 gráficos"],["open","💬 abiertas"]].map(([t,l]) => (
           <button key={t} onClick={()=>setTab(t)}
-            style={{ flex:1, padding:"12px", border:`1.5px solid ${tab===t ? C.pink : C.border}`, borderRadius:12, background: tab===t ? C.pink+"22" : "transparent", color: tab===t ? C.pink : C.sub, fontSize:14, fontWeight:800, cursor:"pointer", fontFamily:"inherit", transition:"all .15s" }}>
+            style={{ flex:1, padding:"12px", border:`1.5px solid ${tab===t ? C.primary : C.border}`, borderRadius:12, background: tab===t ? C.primary+"22" : "transparent", color: tab===t ? C.primary : C.sub, fontSize:14, fontWeight:800, cursor:"pointer", fontFamily:"inherit", transition:"all .15s" }}>
             {l}
           </button>
         ))}
@@ -580,7 +576,7 @@ function ResultsView({ resps, loading }) {
       {tab==="charts" && Q.filter(q=>q.type!=="open").map(q => {
         const s  = stats[q.id];
         if (!s || s.total===0) return null;
-        const ac = q.section ? (SECTION_COLORS[q.section]||C.pink) : C.pink;
+        const ac = q.section ? (SECTION_COLORS[q.section]||C.primary) : C.primary;
         const isOpen = open===q.id;
         return (
           <div key={q.id} style={{ marginBottom:8, border:`1px solid ${C.border}`, borderRadius:16, background:C.card, overflow:"hidden" }}>
@@ -613,7 +609,7 @@ function ResultsView({ resps, loading }) {
             {answers.length===0
               ? <p style={{ fontSize:13, color:C.sub, fontStyle:"italic", margin:0 }}>Sin respuestas todavía</p>
               : answers.map((a,i) => (
-                <div key={i} style={{ padding:"12px 14px", background:C.card2, borderRadius:10, fontSize:14, color:C.sub, lineHeight:1.6, marginBottom:8, borderLeft:`3px solid ${C.pink}` }}>
+                <div key={i} style={{ padding:"12px 14px", background:C.card2, borderRadius:10, fontSize:14, color:C.sub, lineHeight:1.6, marginBottom:8, borderLeft:`3px solid ${C.primary}` }}>
                   "{a}"
                 </div>
               ))
