@@ -43,8 +43,9 @@ const sb = {
   async delete(table, id) {
     const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`, {
       method: "DELETE",
-      headers: this.headers,
+      headers: { ...this.headers, Prefer: "return=minimal" },
     });
+    if (!r.ok) { const e = await r.text(); console.error("Delete error:", r.status, e); }
     return r.ok;
   },
 };
