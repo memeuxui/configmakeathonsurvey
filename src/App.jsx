@@ -130,7 +130,7 @@ const Q = [
   { id:"molestia_razon", section:null, type:"multi",
     text:"¿Por qué te molesta o te llama la atención?",
     hint:"Podés elegir más de una opción",
-    options:["Hay que recordarle su turno constantemente","Corta el ritmo y la dinámica de la reunión","Termina contagiando a los demás","Se pierde la gracia de estar juntos","Genera tensión o incomodidad en el grupo","No me molesta / no aplica"] },
+    options:["Corta la conversación y la dinámica del grupo","Termina contagiando a los demás","Se pierde la gracia de estar juntos","Genera tensión o incomodidad","La persona se desconecta del momento","No me molesta / no aplica"] },
   { id:"molestia_situacion", section:null, type:"open", optional:true,
     text:"¿Recordás alguna situación donde el celular arruinó un momento compartido?",
     hint:"Opcional", placeholder:"Contanos si querés…" },
